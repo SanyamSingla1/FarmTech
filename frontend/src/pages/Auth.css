@@ -1,0 +1,28 @@
+.auth {
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+.auth form {
+  background: white;
+  padding: 30px;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.auth input,
+.auth select {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.auth button {
+  width: 100%;
+  padding: 10px;
+  background: #2e7d32;
+  color: white;
+  border: none;
+}
