@@ -1,128 +1,336 @@
-import { useEffect, useState } from "react";
-import { getWeather, getAI } from "../api/api";
-import "./Dashboard.css";
+// // import { useEffect, useState, useContext } from "react";
+// // import { AuthContext } from "../context/AuthContext";
+// // import { getWeather, getCropRecommendation } from "../api/api";
+// // import "./Dashboard.css";
 
-export default function Dashboard() {
-  const [weather, setWeather] = useState(null);
-  const [aiResult, setAIResult] = useState(null);
-  const [loading, setLoading] = useState(false);
+// // export default function Dashboard() {
+// //   const { user } = useContext(AuthContext);
+// //   const [weather, setWeather] = useState(null);
+// //   const [recommendation, setRecommendation] = useState(null);
+// //   const [loading, setLoading] = useState(false);
+// //   const [weatherError, setWeatherError] = useState("");
+// //   const [recommendationError, setRecommendationError] = useState("");
 
-  const user = JSON.parse(localStorage.getItem("user"));
-const cropImages = {
-    Wheat: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Wheat_field.jpg",
-    Mustard: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Mustard_field.jpg",
-    Moong: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Green_gram_plant.jpg",
-    Rice: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Rice_fields.jpg",
-  };
+// //   useEffect(() => {
+// //     if (!user?.location) return;
 
-  // 🌦️ Load weather on page load
-  useEffect(() => {
-    const loadWeather = async () => {
-      try {
-        const res = await getWeather("Delhi");
+// //     const loadWeather = async () => {
+// //       try {
+// //         const res = await getWeather(user.location);
+// //         setWeather(res);
+// //       } catch (err) {
+// //         setWeatherError("Unable to load weather. Please check your profile.");
+// //         console.error(err);
+// //       }
+// //     };
 
-        if (res?.error) {
-          console.error(res.error);
-          return;
-        }
+// //     loadWeather();
+// //   }, [user]);
 
-        setWeather(res);
-      } catch (err) {
-        console.error("Weather error:", err);
-      }
-    };
+// //   const handleGetRecommendation = async () => {
+// //     setLoading(true);
+// //     setRecommendation(null);
+// //     setRecommendationError("");
 
-    loadWeather();
-  }, []);
+// //     try {
+// //       const res = await getCropRecommendation();
+// //       if (!res || !res.recommendation) {
+// //         setRecommendationError("No crop recommendation returned.");
+// //       } else {
+// //         setRecommendation(res.recommendation);
+// //       }
+// //     } catch (err) {
+// //       setRecommendationError("Failed to fetch crop recommendation.");
+// //       console.error(err);
+// //     }
 
-  // 🤖 AI FUNCTION
-  const handleGetCrop = async () => {
-    setLoading(true);
+// //     setLoading(false);
+// //   };
 
-    try {
-      if (!user?.soil || !user?.location) {
-        alert("Missing user data (soil/location)");
-        setLoading(false);
-        return;
-      }
+// //   return (
+// //     <div className="dashboard">
+// //       <h2>Welcome, {user?.username || "Farmer"} 👋</h2>
 
-      const res = await getAI({
-        soil: user.soil,
-        location: user.location,
-        weather: weather?.condition || "Normal",
-        farmSize: user.farmSize || "unknown",
-      });
+// //       <div className="card">
+// //         <h3>Weather</h3>
+// //         {weather ? (
+// //           <>
+// //             <p>🌡 Temp: {weather.temp}°C</p>
+// //             <p>💧 Humidity: {weather.humidity}%</p>
+// //             <p>☁ Condition: {weather.condition}</p>
+// //           </>
+// //         ) : (
+// //           <p>{weatherError || "Loading weather..."}</p>
+// //         )}
+// //       </div>
 
-      if (res?.error) {
-        alert(res.error);
-        setLoading(false);
-        return;
-      }
+// //       <div className="card">
+// //         <h3>Crop Recommendation</h3>
+// //         <button onClick={handleGetRecommendation} disabled={loading || !user?.location}>
+// //           {loading ? "Generating..." : "Get Recommendation"}
+// //         </button>
 
-      setAIResult(res.result);
-    } catch (err) {
-      console.error("AI error:", err);
-      alert("AI request failed");
-    }
+// //         {recommendationError && <p className="error-text">{recommendationError}</p>}
 
-    setLoading(false);
-  };
+// //         {recommendation && (
+// //           <div className="recommendation-result">
+// //             <p>{typeof recommendation === "string" ? recommendation : JSON.stringify(recommendation, null, 2)}</p>
+// //           </div>
+// //         )}
+// //       </div>
+// //     </div>
+// //   );
+// // }
 
-  // 🧠 Render AI result safely
- const renderAIResult = () => {
-  if (!aiResult) return null;
+// import React, { useContext, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { AuthContext } from "../context/AuthContext";
+// import Navbar from "../components/Navbar";
+// import "./LandingPage.css";
 
-  try {
-    const data =
-      typeof aiResult === "string" ? JSON.parse(aiResult) : aiResult;
+// export default function LandingPage() {
+//   const navigate = useNavigate();
+//   const { user } = useContext(AuthContext);
 
-    return data.crops.map((crop, index) => (
-      <div key={index} className="crop-card">
+//   const handleProtectedNavigation = (path) => {
+//     if (user) {
+//       navigate(path);
+//     } else {
+//       navigate("/login");
+//     }
+//   };
 
-        <img
-          src={cropImages[crop.name] || "https://via.placeholder.com/150"}
-          alt={crop.name}
-          className="crop-img"
-        />
+//   return (
+//     <div className="landing-container">
+//       <Navbar />
 
-        <h3>{crop.name}</h3>
-        <p>{crop.reason}</p>
-        <small>{crop.variety}</small>
-      </div>
-    ));
-  } catch (err) {
-    return <p>Error parsing AI response</p>;
-  }
-};
+//       <main className="landing-main">
+//         <section className="hero">
+//           <div className="hero-content">
+//             <h2 className="hero-title">
+//               Smart Farming for Modern Farmers
+//             </h2>
 
-  return (
-    <div className="dashboard">
-      <h2>Welcome, {user?.name} 👋</h2>
+//             <p className="hero-subtitle">
+//               Maximize your crop yield with AI-powered
+//               recommendations, real-time alerts, and
+//               comprehensive farm management tools
+//             </p>
 
-      {/* 🌦️ WEATHER CARD */}
-      <div className="card">
-        <h3>Weather</h3>
-        {weather ? (
-          <>
-            <p>🌡 Temp: {weather.temp}°C</p>
-            <p>💧 Humidity: {weather.humidity}%</p>
-            <p>☁ Condition: {weather.condition}</p>
-          </>
-        ) : (
-          <p>Loading weather...</p>
-        )}
-      </div>
+//             {user ? (
+//               <button
+//                 onClick={() => navigate("/dashboard")}
+//                 className="cta-button"
+//               >
+//                 Open Dashboard 📊
+//               </button>
+//             ) : (
+//               <button
+//                 onClick={() => navigate("/register")}
+//                 className="cta-button"
+//               >
+//                 Get Started 🚀
+//               </button>
+//             )}
+//           </div>
 
-      {/* 🤖 AI CARD */}
-      <div className="card">
-        <h3>Crop Recommendation</h3>
+//           <div className="hero-image">
+//             <div className="farm-illustration">
+//               🌱🌿🌾
+//             </div>
+//           </div>
+//         </section>
 
-        <button onClick={handleGetCrop} disabled={loading}>
-          {loading ? "Generating..." : "Get Recommendation"}
-        </button>
+//         <section className="features-section">
+//           <h2 className="section-title">
+//             Our Features
+//           </h2>
 
-        <div className="ai-result">{renderAIResult()}</div>
-      </div>
-    </div>
-  );
-}
+//           <div className="features-grid">
+//             <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/weather")
+//               }
+//             >
+//               <span className="feature-icon">🌾</span>
+//               <h3>Weather Information</h3>
+//               <p>
+//                 Get real-time weather updates for your farm
+//               </p>
+//             </div>
+
+//             <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/crop-recommendations")
+//               }
+//             >
+//               <span className="feature-icon">🌾</span>
+//               <h3>Recommended Crops</h3>
+//               <p>
+//                 AI-powered crop recommendations based on
+//                 your location and soil type
+//               </p>
+//             </div>
+
+//             {/* <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/crops")
+//               }
+//             >
+//               <span className="feature-icon">📊</span>
+//               <h3>Crop Management</h3>
+//               <p>
+//                 Track growth stages, manage multiple crops,
+//                 and maintain detailed harvest records
+//               </p>
+//             </div> */}
+
+//             {/* <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/irrigation")
+//               }
+//             >
+//               <span className="feature-icon">💧</span>
+//               <h3>Smart Irrigation</h3>
+//               <p>
+//                 Get real-time alerts and recommendations
+//                 for optimal watering schedules
+//               </p>
+//             </div> */}
+
+//             <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/fertilizer")
+//               }
+//             >
+//               <span className="feature-icon">🌱</span>
+//               <h3>Fertilizer Guide</h3>
+//               <p>
+//                 Customized NPK recommendations based on
+//                 soil type and growth stage
+//               </p>
+//             </div>
+
+//             <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/chatbot")
+//               }
+//             >
+//               <span className="feature-icon">🤖</span>
+//               <h3>AI Assistant</h3>
+//               <p>
+//                 Chat with our farming expert AI for
+//                 instant answers to your questions
+//               </p>
+//             </div>
+
+//             <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/disease-detection")
+//               }
+//             >
+//               <span className="feature-icon">🦠</span>
+//               <h3>Disease Detection</h3>
+//               <p>
+//                 Upload crop images and get AI-powered
+//                 disease identification and treatment plans
+//               </p>
+//             </div>
+
+//             {/* <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/tasks")
+//               }
+//             >
+//               <span className="feature-icon">📅</span>
+//               <h3>Task Scheduler</h3>
+//               <p>
+//                 Plan and track farm activities with
+//                 reminders and notifications
+//               </p>
+//             </div> */}
+
+//             <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/crop-cycle")
+//               }
+//             >
+//               <span className="feature-icon">🔔</span>
+//               <h3>Smart Alerts</h3>
+//               <p>
+//                 Get notifications for weather,
+//                 irrigation, fertilizer, and harvest times
+//               </p>
+//             </div>
+
+//             {/* <div
+//               className="feature-card"
+//               onClick={() =>
+//                 handleProtectedNavigation("/profile")
+//               }
+//             >
+//               <span className="feature-icon">👤</span>
+//               <h3>Profile Management</h3>
+//               <p>
+//                 Manage your farm details including land
+//                 size, location, and soil type
+//               </p>
+//             </div> */}
+
+//           </div>
+//         </section>
+
+//         <section className="benefits-section">
+//           <h2 className="section-title">
+//             Why Choose FarmTech?
+//           </h2>
+
+//           <ul className="benefits-list">
+//             <li>
+//               ✓ Increase crop yield by up to 40% with
+//               smart recommendations
+//             </li>
+
+//             <li>
+//               ✓ Reduce water usage and save on irrigation
+//               costs
+//             </li>
+
+//             <li>
+//               ✓ Early disease detection to prevent crop
+//               losses
+//             </li>
+
+//             <li>
+//               ✓ Real-time weather-based notifications
+//             </li>
+
+//             <li>
+//               ✓ Complete farm history and analytics
+//             </li>
+
+//             <li>
+//               ✓ Email and website notifications
+//             </li>
+//           </ul>
+//         </section>
+//       </main>
+
+//       <footer className="landing-footer">
+//         <p>
+//           &copy; 2024 FarmTech. Empowering farmers with
+//           technology.
+//         </p>
+//       </footer>
+//     </div>
+//   );
+// }

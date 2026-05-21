@@ -1,0 +1,24 @@
+.crop-cycle-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+.crop-cycle-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.crop-cycle-container input,
+.crop-cycle-container button {
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.crop-cycle-container button {
+  background: green;
+  color: white;
+  border: none;
+  cursor: pointer;
+}

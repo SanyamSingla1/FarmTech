@@ -1,134 +1,115 @@
-const db = require("../config/db");
+// controllers/authController.js
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const db = require("../config/db");
+const { sendEmail } = require("../services/emailService");
 
-// =======================
 // REGISTER
-// =======================
 exports.register = async (req, res) => {
-  const { name, email, password, farmSize, location, soil } = req.body;
-
-  // validation
-  if (!name || !email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Name, email, password required",
-    });
-  }
-
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const { username, email, password, land_size, soil_type, location } = req.body;
 
-    const sql =
-      "INSERT INTO users (name,email,password,farmSize,location,soil) VALUES (?,?,?,?,?,?)";
+    const hashed = await bcrypt.hash(password, 10);
 
-    db.query(
-      sql,
-      [name, email, hashedPassword, farmSize, location, soil],
-      (err, result) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            message: err.sqlMessage || err.message,
-          });
-        }
-
-        const user = {
-          id: result.insertId,
-          name,
-          email,
-          soil,
-  location,
-  farmSize,
-        };
-
-        const token = jwt.sign(
-          { id: user.id, email: user.email },
-          process.env.JWT_SECRET,
-          { expiresIn: process.env.JWT_EXPIRES || "1d" }
-        );
-
-        return res.status(201).json({
-          success: true,
-          token,
-          user,
-        });
-      }
+    await db.query(
+      "INSERT INTO users (username,email,password,land_size,soil_type,location) VALUES (?,?,?,?,?,?)",
+      [username, email, hashed, land_size, soil_type, location]
     );
+
+    // ✅ Welcome Email (Resend format)
+    await sendEmail({
+      to: email,
+      subject: "Welcome to FarmTech 🌾",
+      html: `
+        <div style="font-family:Arial">
+          <h2>Welcome ${username} 👋</h2>
+          <p>Your account has been created successfully.</p>
+          <p>Start exploring crop recommendations, weather alerts, and AI insights.</p>
+        </div>
+      `,
+    });
+
+    return res.json({
+      success: true,
+      message: "User registered",
+    });
+
   } catch (err) {
+    console.error("REGISTER ERROR:", err);
     return res.status(500).json({
       success: false,
-      message: "Registration error",
+      message: "Register server error",
     });
   }
 };
 
-// =======================
+
 // LOGIN
-// =======================
-exports.login = (req, res) => {
-  const { email, password } = req.body;
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  // validation
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Email and password required",
-    });
-  }
+    const result = await db.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
 
-  const sql = "SELECT * FROM users WHERE email=?";
+    const users = result[0];
 
-  db.query(sql, [email], async (err, result) => {
-    if (err) {
-      return res.status(500).json({
-        success: false,
-        message: err.message,
-      });
-    }
-
-    if (result.length === 0) {
+    if (!users || users.length === 0) {
       return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
 
-    const user = result[0];
+    const user = users[0];
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) {
-      return res.status(401).json({
+    if (!match) {
+      return res.status(400).json({
         success: false,
         message: "Wrong password",
       });
     }
 
-    if (!process.env.JWT_SECRET) {
-      return res.status(500).json({
-        success: false,
-        message: "JWT secret missing",
-      });
-    }
-
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES || "1d" }
+      { expiresIn: "7d" }
     );
+
+    // ✅ Login Email (Security Alert Style)
+    await sendEmail({
+      to: user.email,
+      subject: "Login Alert 🔐 - FarmTech",
+      html: `
+        <div style="font-family:Arial">
+          <h2>Hello ${user.username}</h2>
+          <p>You just logged into your FarmTech account.</p>
+          <p>If this wasn't you, please reset your password immediately.</p>
+        </div>
+      `,
+    });
 
     return res.json({
       success: true,
       token,
       user: {
         id: user.id,
-        name: user.name,
+        username: user.username,
         email: user.email,
-        soil: user.soil || "",
-    location: user.location || "",
-    farmSize: user.farmSize || "",
+        soil_type: user.soil_type,
+        location: user.location,
       },
     });
-  });
+
+  } catch (err) {
+    console.error("LOGIN ERROR:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Login server error",
+    });
+  }
 };

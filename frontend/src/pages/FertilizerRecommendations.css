@@ -1,0 +1,477 @@
+/* =========================
+   PAGE BACKGROUND
+========================= */
+.fertilizer-page {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* =========================
+   MAIN WRAPPER
+========================= */
+.fertilizer-recommendations {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* =========================
+   HEADER
+========================= */
+.recommendations-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.recommendations-header h2 {
+  color: #333;
+  margin: 0;
+}
+
+/* =========================
+   HEADER BUTTONS
+========================= */
+.header-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-ai-rec {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-ai-rec:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ai-rec:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-add-rec {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-add-rec:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   AI FORM SECTION
+========================= */
+.ai-form-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border-left: 5px solid #667eea;
+}
+
+.ai-form-section h3 {
+  color: #667eea;
+  margin-top: 0;
+}
+
+/* AI FORM GRID */
+.ai-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ai-form label {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.ai-form input,
+.ai-form select {
+  padding: 0.7rem;
+  border: 2px solid #ecf0f1;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.ai-form input:focus,
+.ai-form select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* =========================
+   AI BUTTON
+========================= */
+.btn-get-ai {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: all 0.3s ease;
+}
+
+.btn-get-ai:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-get-ai:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================
+   AI RESULT BOX
+========================= */
+.ai-recommendation-result {
+  background: #f0f4ff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #667eea;
+  margin-top: 1.5rem;
+}
+
+.ai-recommendation-result h4 {
+  color: #667eea;
+  margin-top: 0;
+}
+
+.recommendation-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.recommendation-details p {
+  margin: 0;
+  padding: 0.8rem;
+  background: white;
+  border-radius: 6px;
+  color: #555;
+}
+
+.recommendation-details strong {
+  color: #333;
+}
+
+/* =========================
+   USE AI BUTTON
+========================= */
+.btn-use-ai {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn-use-ai:hover {
+  background: #229954;
+  transform: translateY(-2px);
+}
+
+/* =========================
+   MANUAL FORM
+========================= */
+.rec-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.rec-form h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* =========================
+   NPK SECTION
+========================= */
+.npk-section {
+  margin: 1.5rem 0;
+}
+
+.npk-section h4 {
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.npk-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+/* =========================
+   RECOMMENDATIONS LIST
+========================= */
+.recommendations-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1rem;
+}
+
+/* =========================
+   CARD
+========================= */
+.rec-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-left: 5px solid #4caf50;
+  transition: all 0.3s ease;
+}
+
+.rec-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.rec-card.applied {
+  border-left-color: #2196f3;
+  background: linear-gradient(135deg, #f5faff, #ffffff);
+}
+
+.rec-card.pending {
+  border-left-color: #ff9800;
+}
+
+/* =========================
+   CARD HEADER
+========================= */
+.rec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.rec-header h4 {
+  margin: 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+/* =========================
+   BADGES
+========================= */
+.rec-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.soil-badge,
+.stage-badge,
+.applied-badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.soil-badge {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.stage-badge {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.applied-badge {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.npk-display {
+  background: #f5f5f5;
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.rec-details p {
+  margin: 0.5rem 0;
+  color: #555;
+}
+
+.rec-date {
+  font-size: 0.85rem;
+  color: #666;
+  border-top: 1px solid #eee;
+  padding-top: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+.rec-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.btn-apply {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-apply:hover {
+  background: #45a049;
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: #d32f2f;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .fertilizer-recommendations {
+    padding: 1rem;
+  }
+
+  .recommendations-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .npk-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .recommendations-list {
+    grid-template-columns: 1fr;
+  }
+
+  .rec-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rec-actions {
+    flex-direction: column;
+  }
+}
+
+/* =========================
+   SIMPLE FORM (FIXED)
+========================= */
+.fertilizer-form {
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fertilizer-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.fertilizer-form input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 14px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.fertilizer-form input:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+  background: #fff;
+}
+
+.fertilizer-form button {
+  margin-top: 10px;
+  padding: 12px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.fertilizer-form button:hover {
+  background: #388e3c;
+}
+
+.fertilizer-form button:disabled {
+  background: #a5d6a7;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

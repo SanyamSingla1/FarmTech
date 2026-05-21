@@ -1,0 +1,221 @@
+/* ================= RECOMMENDATION RESULT ================= */
+.recommendation-result {
+  margin-top: 2rem;
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= CARDS GRID ================= */
+.fertilizer-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+/* ================= SINGLE CARD ================= */
+.fert-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  animation: cardFadeIn 0.5s ease;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fert-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= CARD HEADER ================= */
+.fert-card-header {
+  background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+  color: white;
+  padding: 1.5rem;
+  border-bottom: 3px solid #145a32;
+}
+
+.fert-card-header h4 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* ================= CARD BODY ================= */
+.fert-card-body {
+  padding: 1.5rem;
+}
+
+/* ================= SECTIONS ================= */
+.fert-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.fert-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.fert-section strong {
+  display: block;
+  color: #27ae60;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.fert-section p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* ================= NPK ================= */
+.npk-value {
+  background: #f0f9f7;
+  color: #16a085;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+/* ================= LISTS ================= */
+
+/* FIXED: Benefits list color issue */
+.fert-section .benefits-list li {
+  margin-bottom: 0.5rem;
+  color: #450156 !important; /* Use a strong red for benefits */
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* FIXED: Precautions list */
+.fert-section .precautions-list li {
+  margin-bottom: 0.5rem;
+  color: #f98978;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Keep spacing clean */
+.benefits-list,
+.precautions-list {
+  margin: 0.5rem 0 0 1.5rem;
+  padding: 0;
+  list-style-position: inside;
+}
+
+/* ================= ERROR BOX ================= */
+.error-message {
+  background: linear-gradient(135deg, #fadbd8 0%, #f5b7b1 100%);
+  color: #c0392b;
+  padding: 1.2rem;
+  border-radius: 8px;
+  border-left: 4px solid #e74c3c;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease;
+}
+
+/* ================= RAW OUTPUT ================= */
+.raw-recommendation {
+  background: #f5f7fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+  color: #333;
+  font-family: "Courier New", monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+/* ================= EMPTY STATE ================= */
+.no-recommendations {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #95a5a6;
+  font-size: 1.1rem;
+  background: #f5f7fa;
+  border-radius: 8px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .fertilizer-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .fert-card-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .fert-card-body {
+    padding: 1rem;
+  }
+
+  .fert-section {
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+  }
+
+  .fert-section strong {
+    font-size: 0.95rem;
+  }
+
+  .fert-section p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fertilizer-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .fert-card {
+    border-radius: 8px;
+  }
+
+  .fert-card-header {
+    padding: 1rem;
+  }
+
+  .fert-card-body {
+    padding: 0.8rem;
+  }
+}

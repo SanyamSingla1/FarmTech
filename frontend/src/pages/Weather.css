@@ -1,0 +1,80 @@
+/* General dashboard layout */
+.dashboard {
+  min-height: 100vh;
+  padding: 30px;
+  background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+}
+
+/* Welcome heading */
+.dashboard h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #2e7d32;
+}
+
+/* Card styling */
+.card {
+  max-width: 500px;
+  background: #ffffff;
+  padding: 20px 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+}
+
+/* Card title */
+.card h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #1565c0;
+}
+
+/* Weather info section */
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 16px;
+}
+
+/* Individual text rows */
+.weather-info p {
+  margin: 0;
+  padding: 8px 10px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border-left: 4px solid #4caf50;
+}
+
+/* Loading & error text */
+.card p {
+  font-size: 15px;
+}
+
+/* Error styling */
+.card p:contains("Location not found"),
+.card p:contains("Unable to fetch weather updates") {
+  color: #d32f2f;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .dashboard {
+    padding: 15px;
+  }
+
+  .card {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .dashboard h1 {
+    font-size: 22px;
+  }
+}

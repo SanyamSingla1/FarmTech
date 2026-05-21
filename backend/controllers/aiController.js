@@ -1,64 +1,63 @@
-const groq = require("../config/groq");
+const axios = require("axios");
 
-exports.getCropRecommendation = async (req, res) => {
+const cropRecommend = async (req, res) => {
   try {
-    const { soil, location, weather, farmSize } = req.body;
+    const { soil_type, location, land_size } = req.body;
 
-    // ✅ validation
-    if (!soil || !location) {
-      return res.status(400).json({
-        error: "soil and location are required",
-      });
-    }
+    const prompt = `You are an expert agricultural AI. Based on the user's farm profile, provide crop recommendations in valid JSON format.
 
-    const completion = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
-      messages: [
-        {
-          role: "user",
-          content: `
-You are an agriculture AI assistant.
+User Farm Profile:
+- Soil Type: ${soil_type}
+- Location: ${location}
+- Land Size: ${land_size} hectares
 
-Return ONLY JSON in this format:
-
+Return ONLY valid JSON (no markdown, no code blocks) with this exact structure:
 {
-  "crops": [
+  "recommended_crops": [
     {
-      "name": "",
-      "reason": "",
-      "variety": ""
+      "crop": "Crop Name",
+      "season": "Season when to plant",
+      "reason": "Why this crop is suitable",
+      "profitability": "low/medium/high",
+      "duration": "Months to harvest",
+      "yield": "Expected yield amount",
+      "benefits": ["benefit1", "benefit2"],
+      "yield_per_hectare": "Estimated kg/hectare",
+      "profit_potential": "Expected profit range"
     }
   ]
-}
+}`;
 
-Rules:
-- Only 3 crops
-- No extra text
-- No explanation outside JSON
-- Keep reasons short
-          `,
+    const response = await axios.post(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json",
         },
-      ],
-      temperature: 0.7,
-    });
+      }
+    );
 
-    const result = completion?.choices?.[0]?.message?.content;
-
-    if (!result) {
-      return res.status(500).json({
-        error: "Empty AI response",
-      });
+    let recommendation = response.data.choices[0].message.content;
+    
+    // Try to parse and validate the response
+    try {
+      const parsed = JSON.parse(recommendation);
+      res.json({ recommendation: parsed });
+    } catch (parseErr) {
+      // If parsing fails, return as string
+      console.log("Could not parse AI response as JSON:", parseErr);
+      res.json({ recommendation });
     }
-
-    return res.json({ result });
-
-  } catch (err) {
-  console.error("🔥 FULL AI ERROR:", err);
-
-  return res.status(500).json({
-    error: "AI failed",
-    details: err.message,
-    stack: err.stack,
-  });
-}
+  } catch (error) {
+    console.log(error.response?.data || error.message);
+    res.status(500).json({ error: "AI request failed" });
+  }
 };
+
+module.exports = { cropRecommend };

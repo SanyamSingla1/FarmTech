@@ -1,45 +1,52 @@
-const BASE = "http://localhost:5000/api";
+﻿import client from "./client";
 
-// 🌦️ WEATHER
 export const getWeather = async (city) => {
-  try {
-    const res = await fetch(`${BASE}/weather?city=${city}`);
-    return await res.json();
-  } catch (err) {
-    console.error("Weather API error:", err);
-    return { error: "Weather failed" };
-  }
+  const res = await client.get(`/weather?city=${encodeURIComponent(city)}`);
+  return res.data;
 };
 
-// 🤖 AI
-export const getAI = async (data) => {
-  try {
-    const token = localStorage.getItem("token");
+export const getCropRecommendation = async (user) => {
+  const res = await client.post("/ai/crop", {
+    soil_type: user.soil_type,
+    location: user.location,
+    land_size: user.land_size  
+  });
 
-    if (!token) {
-      return { error: "No token found. Please login again." };
-    }
+  return res.data;
+};
+export const detectDisease = async (file) => {
+  const formData = new FormData();
 
-    const res = await fetch(`${BASE}/ai`, {
-      method: "POST",
+  formData.append("image", file);
+
+  const res = await client.post(
+    "/disease/detect",
+    formData,
+    {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
       },
-      body: JSON.stringify(data),
-    });
-
-    const result = await res.json();
-
-    // 🚨 IMPORTANT: handle backend errors
-    if (!res.ok) {
-      return { error: result.error || "AI request failed" };
     }
+  );
 
-    return result;
+  return res.data;
+};
 
-  } catch (err) {
-    console.error("AI API error:", err);
-    return { error: "AI server error" };
-  }
+export const getFertilizerRecommendation = async (cropName, user) => {
+  const res = await client.post("/fertilizer/recommend", {
+    crop: cropName,
+    soil_type: user?.soil_type,
+    location: user?.location,
+  });
+  return res.data;
+};
+
+export const chatWithAI = async (message) => {
+  const res = await client.post("/chat/chat", { message });
+  return res.data;
+};
+export const addCropCycle = async (data) => {
+  const res = await client.post("/crop/add", data);
+
+  return res.data;
 };

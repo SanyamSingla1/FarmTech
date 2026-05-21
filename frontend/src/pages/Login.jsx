@@ -15,7 +15,7 @@ export default function Login() {
 
     if (res?.success && res?.user) {
       login(res);
-      navigate("/dashboard");
+      navigate("/");
     } else {
       alert(res.message || "Login failed");
     }
@@ -29,20 +29,21 @@ export default function Login() {
         <input
           type="email"
           placeholder="Email"
-          onChange={(e) =>
-            setForm({ ...form, email: e.target.value })
-          }
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
         />
 
         <input
           type="password"
           placeholder="Password"
-          onChange={(e) =>
-            setForm({ ...form, password: e.target.value })
-          }
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          required
         />
 
         <button type="submit">Login</button>
+        <p>Don't have an account? <a href="/register">Register</a></p>
       </form>
     </div>
   );

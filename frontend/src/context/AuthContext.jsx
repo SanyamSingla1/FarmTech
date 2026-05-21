@@ -10,6 +10,8 @@ export default function AuthProvider({ children }) {
       const data = localStorage.getItem("user");
       if (data && data !== "undefined") {
         setUser(JSON.parse(data));
+      } else {
+        localStorage.removeItem("user");
       }
     } catch (err) {
       console.error("Invalid user data");
